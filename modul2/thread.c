@@ -1,17 +1,44 @@
-#include<stdio.h>
-#include<pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <pthread.h>
 
 void *run(void *args){
-	int i=0;
-	
-	for(i=1; i<=30; i++)
+	while(1)
 	{
-		printf("Thread 1 : %d\n", i);
+		pid_t pid;
+
+		printf("Fork program starting\n");
+		pid = fork();
+		if(pid == 0)
+		{
+			char command[10];
+			char suffix[50];
+			scanf("%s", command);
+			scanf("%s", suffix);
+			char *const ps_argv[] = {command, suffix, 0};
+			execvp(command, ps_argv);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			int childStatus;
+			pid_t returnValue = waitpid(pid, &childStatus, 0);
+			if(returnValue > 0)
+			{
+				if(WIFEXITED(childStatus))
+					printf("Exit Code: %d\n", WEXITSTATUS(childStatus));
+				else
+					printf("Exit status: 0x%.4x\n", childStatus);
+			}
+		}
 	}
 }
 
 void *run2(void *args){
-	int i=0;
+	int i;
 	
 	for(i=1; i<=30; i++)
 	{
@@ -21,12 +48,16 @@ void *run2(void *args){
 
 int main(){
 	pthread_t t1, t2;
-	pthread_create(&t1, NULL, run, NULL);
+	void *thread_result;
+	//pthread_create(&t1, NULL, run, NULL);
 	pthread_create(&t2, NULL, run2, NULL);
-	
+	pthread_create(&t1, NULL, run2, NULL);
 	int i;
-	for(i=0; i<=30; i++)
+	pthread_join(t2, &thread_result);
+	for(i=1; i<=30; i++)
 	{
 		printf("Main : %d\n", i);
 	}
+
+	return 0;
 }	

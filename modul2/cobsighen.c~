@@ -1,7 +1,9 @@
+#include<sys/types.h>
 #include<unistd.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<signal.h>
+#include<pthread.h>
 
 void signal_callback_handler(int signum)
 {
@@ -19,22 +21,33 @@ void signal_callback_handler(int signum)
 	}
 }
 
+void run1(void *arg)
+{
+	while(1)
+	{
+		char command[10];
+		char suffix[50];
+		scanf("%s", command);
+		scanf("%s", suffix);
+		char *const ps_argv[] = {command, suffix, 0};
+		execvp(command, ps_argv);
+		printf("Program processing stuff here.\n");
+		sleep(1);
+	}
+}
+
+
 int main()
 {
 	signal(SIGINT, signal_callback_handler);
 	signal(SIGTSTP, signal_callback_handler);	
 	
-	do
+	//pthread_t t1;
+	//pthread_create(t1, NULL, run1, NULL);
+	while(getchar()!=EOF)
 	{
-		//char command[10];
-		//char suffix[50];
-		//scanf("%s", command);
-		//scanf("%s", suffix);
-		//char *const ps_argv[] = {command, suffix, 0};
-		//execvp(command, ps_argv);
-		printf("Program processing stuff here.\n");
-		sleep(1);
-	}while(getchar()!=EOF);
-	
+		printf("1\n");
+	}
+	exit(SIGKILL);
 	return EXIT_SUCCESS;
 }

@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <pthread.h>
+
+int countPrime = 0;
+
+void *run(void *args){	
+	int n = (int)args
+	if(n<=1)
+	{
+		pthread_exit();
+	}
+	else if(n <= 3)
+	{
+		countPrime += 1;
+		pthread_exit();
+	}
+	else if(n%2 == 0 || n%3 == 0)
+	{
+		pthread_exit();
+	}
+	int i = 5;
+	while(i*i<=n)
+	{
+		if((n%i)==0 || n%(i+2) == 0)
+		{
+			pthread_exit();
+		}
+		i += 6;
+	}
+	countPrime += 1;
+	pthread_exit();
+}
+
+int main(){
+	pthread_t t1, t2;
+	int i, input;
+
+	printf("Masukkan N : ");
+	scanf("%d", input);
+	for(i=1; i<input; i++)
+	{
+		pthread_create(&t1, NULL, run, (void *)i);
+	}
+	
+	pthread_join(t1, NULL);
+	int i;
+	for(i=1; i<=30; i++)
+	{
+		printf("Main : %d\n", i);
+	}
+
+	return 0;
+}	

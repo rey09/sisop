@@ -18,7 +18,7 @@ int main()
 	char *token = strtok(input, " ");
 	simpen[i] = *token;
 	while(token!=NULL){	
-		printf("Hasil strtok() : %s\n", simpen[i]);
+		printf("Hasil strtok() : %s\n", *simpen[i]);
 		i++;	
 		token = strtok(NULL, " ");
 		simpen[i] = *token;
