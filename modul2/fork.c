@@ -16,13 +16,19 @@ int main()
 	pid = fork();
 	if(pid == 0)
 	{
-		char command[10];
-		char suffix[50];
-		scanf("%s", command);
-		scanf("%s", suffix);
-		char *const ps_argv[] = {command, suffix, 0};
-		execvp(command, ps_argv);
-		exit(EXIT_FAILURE);
+		int i=0;
+		// char command[10];
+		// char suffix[50];
+		// scanf("%s", command);
+		// scanf("%s", suffix);
+		// char *const ps_argv[] = {command, suffix, 0};
+		// execvp(command, ps_argv);
+		// exit(EXIT_FAILURE);
+		for(; i<=100; i++)
+		{
+			printf("%d\n",i);
+			sleep(1);
+		}
 	}
 	else
 	{
@@ -39,12 +45,12 @@ int main()
 			printf("Child process still running\n");
 		else
 		{
-			// if(errno == ECHILD)
-			// 	printf(" Error ECHILD!!!\n");
-			// else if(errno == EINTR)
-			// 	printf(" Error EINTR!!!\n");
-			// else
-			// 	printf(" Error EINVAL!!!\n");
+			if(errno == ECHILD)
+		 	printf(" Error ECHILD!!!\n");
+			else if(errno == EINTR)
+			printf(" Error EINTR!!!\n");
+			else
+			printf(" Error EINVAL!!!\n");
 		}
 	}
 	return 0;
