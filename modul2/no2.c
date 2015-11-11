@@ -1,4 +1,4 @@
-#include <stdio.h>
+o#include <stdio.h>
 #include <pthread.h>
 
 void *banyakprima(void*);

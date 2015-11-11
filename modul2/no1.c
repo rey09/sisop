@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <unistd.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,8 +19,12 @@ int main()
 	signal(SIGTSTP, signal_callback_handler);	
 
 	while(1)
-	{
-		printf("tekan ctrl+D untuk keluar, tekan enter untuk lanjut");
+	{	
+		char *cwd;
+		char buff[PATH_MAX + 1];
+		cwd = getcwd( buff, PATH_MAX  + 1 );
+		printf("%s", cwd);
+		printf("press enter to continue or ctrl-D to exit");
 		if(getchar()==EOF)
 		{
 			break;
@@ -58,21 +63,25 @@ int main()
 			pid = fork();
 			if(pid == 0)
 			{
-				if(strcmp(tokens[0],"cd")==0)
-				{
-					chdir(tokens[1]);
-				}
-				else
-				{
-					execvp(tokens[0], tokens);
-					exit(EXIT_FAILURE);
-				}
+				execvp(tokens[0], tokens);
+				exit(EXIT_FAILURE);
 			}
 			else
 			{
 				if (flag == 1)
 				{
 					continue;
+				}
+				else if(strcmp(tokens[0],"cd")==0)
+				{
+					if(tokens[1]==NULL)
+					{
+						chdir("/home/nafiar");
+					}
+					else
+					{
+						chdir(tokens[1]);
+					}
 				}
 				else
 				{
