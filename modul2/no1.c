@@ -31,7 +31,6 @@ int main()
 			char **tokens = malloc(bufsize * sizeof(char*));
 			pid_t pid;
 
-			//printf("Fork program starting\n");
 			printf("insert command here : ");
 			scanf("%[^\n]", command);
 			getchar();
@@ -54,7 +53,6 @@ int main()
 					tokens = realloc(tokens, bufsize * sizeof(char*));
 			   	}
 				token = strtok(NULL, LSH_TOK_DELIM);
-				printf("tokens[position] : %s\n", tokens[position-1]);
 			}
 
 			pid = fork();
